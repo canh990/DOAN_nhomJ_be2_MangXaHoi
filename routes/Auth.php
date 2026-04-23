@@ -36,7 +36,7 @@ Route::post('/logout', [LoginController::class, 'logout'])
 // Trang sau khi đăng nhập
 // -----------------------------------------------
 Route::get('/home', function () {
-    return view('home');
+    return view('auth.home');
 })->name('home')->middleware('auth');
 
 // Quên mật khẩu (placeholder)

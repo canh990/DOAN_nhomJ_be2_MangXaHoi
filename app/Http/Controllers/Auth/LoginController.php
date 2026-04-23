@@ -17,23 +17,28 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $request->validate([
-            'login'    => ['required', 'string'],
+            'login' => ['required', 'string'],
             'password' => ['required', 'string'],
         ], [
-            'login.required'    => 'Vui lòng nhập email hoặc số điện thoại.',
-            'password.required' => 'Vui lòng nhập mật khẩu.',
+            'login.required' => 'Vui long nhap email, so dien thoai hoac ten dang nhap.',
+            'password.required' => 'Vui long nhap mat khau.',
         ]);
 
-        $login    = $request->input('login');
+        $login = trim($request->input('login'));
         $password = $request->input('password');
         $remember = $request->boolean('remember');
 
-        // Xác định field: email hay số điện thoại
-        $field = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'so_dien_thoai';
+        if (filter_var($login, FILTER_VALIDATE_EMAIL)) {
+            $field = 'email';
+        } elseif (preg_match('/^[0-9+\\s().-]+$/', $login)) {
+            $field = 'so_dien_thoai';
+        } else {
+            $field = 'ten_dang_nhap';
+        }
 
-        if (!Auth::attempt([$field => $login, 'password' => $password], $remember)) {
+        if (! Auth::attempt([$field => $login, 'password' => $password], $remember)) {
             throw ValidationException::withMessages([
-                'login' => 'Email/số điện thoại hoặc mật khẩu không đúng.',
+                'login' => 'Thong tin dang nhap hoac mat khau khong dung.',
             ]);
         }
 
@@ -49,6 +54,6 @@ class LoginController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('status', 'Đã đăng xuất thành công.');
+        return redirect()->route('login')->with('status', 'Da dang xuat thanh cong.');
     }
 }

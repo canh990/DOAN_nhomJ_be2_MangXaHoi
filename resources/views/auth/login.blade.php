@@ -161,6 +161,12 @@
                     </div>
                 @endif
 
+                @if (session('error'))
+                    <div class="mb-6 p-4 rounded-lg bg-error-container border border-error/30 text-sm text-on-error-container">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
                 <form method="POST" action="{{ route('login') }}" class="space-y-5">
                     @csrf
 
@@ -181,7 +187,7 @@
                                 autocomplete="username"
                                 required
                                 class="w-full h-12 bg-surface-container-low border @error('login') border-error @else border-outline-variant @enderror focus:border-primary focus:ring-1 focus:ring-primary/20 rounded-lg pl-12 pr-4 text-on-surface placeholder:text-outline transition-all"
-                                placeholder="name@example.com"
+                                placeholder="name@example.com / 0912345678 / username"
                             />
                         </div>
                         @error('login')
@@ -296,5 +302,6 @@
             }
         }
     </script>
+    
 </body>
 </html>
