@@ -26,7 +26,7 @@
         <div class="border-b border-white/10 p-5">
           <p class="text-xs uppercase tracking-[0.3em] text-emerald-300/80">Feature</p>
           <h1 class="mt-1 text-2xl font-semibold">Online / Offline Status</h1>
-          <p class="mt-2 text-sm text-slate-400">Tinh nang rieng cho trang thai hoat dong.</p>
+ 
         </div>
         <div class="flex-1 space-y-2 overflow-y-auto p-3" id="contactListContainer"></div>
       </section>
@@ -43,20 +43,17 @@
             <span class="absolute bottom-0 right-0 h-4 w-4 rounded-full border-2 border-slate-900" id="detailDot"></span>
           </div>
           <div class="min-w-0">
-            <h2 class="truncate text-xl font-semibold" id="detailName">Chon mot nguoi dung</h2>
-            <p class="truncate text-sm text-slate-400" id="detailLastSeen">Chua co du lieu</p>
+            <h2 class="truncate text-xl font-semibold" id="detailName">Chọn một người dùng</h2>
+            <p class="truncate text-sm text-slate-400" id="detailLastSeen">Chưa có dữ liệu</p>
           </div>
         </header>
 
         <div class="grid flex-1 gap-4 p-5 md:grid-cols-[1.2fr_0.8fr]">
           <div class="rounded-3xl border border-white/10 bg-slate-900/50 p-5">
-            <h3 class="text-lg font-semibold">Cap nhat trang thai</h3>
-            <p class="mt-2 text-sm text-slate-400">
-              Bat/tat online doc lap, khong lien quan toi tinh nang chat 1-1.
-            </p>
-
+            <h3 class="text-lg font-semibold">Cập nhật trạng thái</h3>
+         
             <label class="mt-6 block text-xs uppercase tracking-[0.25em] text-slate-400">
-              Ghi chu trang thai
+              Ghi chú trạng thái
             </label>
             <input
               class="mt-2 w-full rounded-2xl border border-white/10 bg-slate-950/70 px-4 py-3 text-sm outline-none"
@@ -78,13 +75,13 @@
                 id="setOfflineButton"
                 type="button"
               >
-                Dat offline
+                Đang offline
               </button>
             </div>
           </div>
 
           <div class="rounded-3xl border border-white/10 bg-slate-900/50 p-5">
-            <h3 class="text-lg font-semibold">Thong ke nhanh</h3>
+            <h3 class="text-lg font-semibold">Thống kê nhanh</h3>
             <div class="mt-4 space-y-4" id="summaryContainer"></div>
           </div>
         </div>
