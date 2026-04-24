@@ -17,6 +17,7 @@ return [
 
     'defaults' => [
         'guard' => env('AUTH_GUARD', 'web'),
+        'passwords' => env('AUTH_PASSWORD_BROKER', 'nguoi_dung'),
         'passwords' => env('AUTH_PASSWORD_BROKER', 'users'),
     ],
 
@@ -40,6 +41,7 @@ return [
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'nguoi_dung',
             'provider' => 'users',
         ],
     ],
@@ -62,11 +64,15 @@ return [
     */
 
     'providers' => [
+        'nguoi_dung' => [
         'users' => [
             'driver' => 'eloquent',
             'model' => env('AUTH_MODEL', User::class),
         ],
 
+        // 'nguoi_dung' => [
+        //     'driver' => 'database',
+        //     'table' => 'nguoi_dung',
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
@@ -93,6 +99,8 @@ return [
     */
 
     'passwords' => [
+        'nguoi_dung' => [
+            'provider' => 'nguoi_dung',
         'users' => [
             'provider' => 'users',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),

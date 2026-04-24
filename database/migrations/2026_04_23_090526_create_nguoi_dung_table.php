@@ -27,11 +27,16 @@ return new class extends Migration
         $table->boolean('con_hoat_dong')->default(true);
         $table->string('nha_cung_cap_oauth', 50)->nullable();
         $table->string('id_oauth', 255)->nullable();
+        $table->rememberToken();
+ laravel13/canh-1-login
         $table->timestamps();
         $table->softDeletes('ngay_xoa');
 
         $table->index('email');
         $table->index('ten_dang_nhap');
+
+        $table->index(['nha_cung_cap_oauth', 'id_oauth']);
+ laravel13/canh-1-login
     });
 }
 
