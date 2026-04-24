@@ -1,4 +1,10 @@
 <?php
+require __DIR__ . '/Auth.php';
+use Illuminate\Support\Facades\Route;
+
+Route::get('/', function () {
+    return view('welcome');
+});
 
 use Illuminate\Support\Facades\Route;
 use App\Models\BaiViet;
@@ -14,4 +20,4 @@ Route::get('/', function () {
 
 Route::get('/feed', function () {
     return redirect('/');
-});
+    });
