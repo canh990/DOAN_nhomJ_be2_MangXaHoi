@@ -5,7 +5,7 @@ use App\Models\BaiViet;
 
 Route::get('/', function () {
     $posts = BaiViet::where('da_xoa', 0)
-        ->with(['nguoiDung', 'camXuc', 'binhLuan.nguoiDung', 'binhLuan.camXuc'])
+        ->with(['nguoiDung', 'camXuc', 'binhLuan.nguoiDung', 'binhLuan.camXuc', 'mediaBaiViet'])
         ->orderByDesc('created_at')
         ->get();
 

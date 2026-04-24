@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\MediaBaiViet;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -56,5 +57,10 @@ class BaiViet extends Model
     public function camXuc(): HasMany
     {
         return $this->hasMany(CamXuc::class, 'bai_viet_id');
+    }
+
+    public function mediaBaiViet(): HasMany
+    {
+        return $this->hasMany(MediaBaiViet::class, 'bai_viet_id')->orderBy('thu_tu');
     }
 }
