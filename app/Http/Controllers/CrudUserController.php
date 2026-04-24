@@ -8,109 +8,146 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
 use App\Models\BaiViet;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class CrudUserController extends Controller
 {
-    public function login()
+    public function dashboard(): RedirectResponse
+    {
+        return redirect()->route('user.list');
+    }
+
+    public function listUser(): View
+    {
+        $users = User::orderBy('id')->paginate(5);
+
+        return view('crud_user.list', ['users' => $users]);
+    }
+
+    public function login(): View
     {
         return view('crud_user.login');
     }
 
-    public function authUser(Request $request)
+    public function authUser(Request $request): RedirectResponse
     {
-        $request->validate([
-            'email' => 'required',
-            'password' => 'required',
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required', 'string'],
         ]);
-        $credentials = $request->only('email', 'password');
-        if (Auth::attempt($credentials)) {
-            return redirect()->intended('list')->withSuccess('Signed in');
+
+        $remember = $request->boolean('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
+
+            return redirect()->route('user.list');
         }
-        return redirect("login")->withSuccess('Login details are not valid');
+
+        return back()
+            ->withErrors(['email' => 'Email hoặc mật khẩu không đúng.'])
+            ->onlyInput('email');
     }
 
-    public function createUser()
+    public function createUser(): View
     {
-        return view('crud_user.create');
+        return view('crud_user.register');
     }
 
-    public function postUser(Request $request)
+    public function showRegister(): View
     {
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
+        return view('crud_user.register');
+    }
+
+    public function postUser(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-        $data = $request->all();
+
         User::create([
-            'name' => $data['name'],
-            'phone' => $data['phone'],
-            'like' => $data['like'],
-            'address' => $data['address'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password'])
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
         ]);
-        return redirect("login");
+
+        return redirect()->route('user.list')->with('success', 'Tạo user thành công');
     }
 
-    public function readUser(Request $request)
+    public function register(Request $request): RedirectResponse
     {
-        $user_id = $request->get('id');
-        $user = User::find($user_id);
-        return view('crud_user.read', ['messi' => $user]);
-    }
-
-    public function deleteUser(Request $request)
-    {
-        $user_id = $request->get('id');
-        User::destroy($user_id);
-        return redirect("list")->withSuccess('Deleted successfully');
-    }
-
-    public function updateUser(Request $request)
-    {
-        $user_id = $request->get('id');
-        $user = User::find($user_id);
-        return view('crud_user.update', ['user' => $user]);
-    }
-
-    public function postUpdateUser(Request $request)
-    {
-        $input = $request->all();
-        $request->validate([
-            'name' => 'required',
-            'email' => 'required|email|unique:users,id,' . $input['id'],
-            'password' => 'required|min:6',
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-        $user = User::find($input['id']);
-        $user->name = $input['name'];
-        $user->email = $input['email'];
-        $user->password = Hash::make($input['password']);
-        $user->like = $input['like'];
-        $user->save();
-        return redirect("list")->withSuccess('Updated successfully');
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('login')->with('success', 'Đăng ký thành công');
     }
 
-    public function listUser()
+    public function signOut(Request $request): RedirectResponse
     {
-        if (Auth::check()) {
-            $users = User::all();
-            return view('crud_user.list', ['users' => $users]);
-        }
-        return redirect("login")->withSuccess('You are not allowed to access');
-    }
-
-    public function signOut()
-    {
-        Session::flush();
         Auth::logout();
-        return redirect('login');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 
-    public function dashboard()
+    public function readUser(User $user): View
     {
-        // Lấy bài viết và nạp sẵn thông tin user để tránh lỗi null
-        $posts = BaiViet::with('user')->latest()->get();
-        return view('crud_users.dashboard', compact('posts'));
+        return view('crud_user.show', ['user' => $user]);
+    }
+
+    public function editUser(User $user): View
+    {
+        return view('crud_user.edit', ['user' => $user]);
+    }
+
+    public function saveUser(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'like' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('user.list')->with('success', 'Cập nhật user thành công');
+    }
+
+    public function deleteUser(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()->route('user.list')->with('success', 'Xóa user thành công');
+    }
+
+    public function updateUser(User $user): View
+    {
+        return view('crud_user.edit', ['user' => $user]);
+    }
+
+    public function postUpdateUser(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'like' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('user.list')->with('success', 'Cập nhật user thành công');
     }
 }

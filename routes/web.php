@@ -27,11 +27,13 @@ Route::post('login', [CrudUserController::class, 'authUser'])->name('user.authUs
 Route::get('create', [CrudUserController::class, 'createUser'])->name('user.createUser');
 Route::post('create', [CrudUserController::class, 'postUser'])->name('user.postUser');
 
-Route::get('read', [CrudUserController::class, 'readUser'])->name('user.readUser');
-Route::get('delete', [CrudUserController::class, 'deleteUser'])->name('user.deleteUser');
+Route::get('read/{user}', [CrudUserController::class, 'readUser'])->name('user.readUser');
+Route::get('edit/{user}', [CrudUserController::class, 'editUser'])->name('user.editUser');
+Route::get('update/{user}', [CrudUserController::class, 'updateUser'])->name('user.updateUser');
+Route::post('update/{user}', [CrudUserController::class, 'postUpdateUser'])->name('user.postUpdateUser');
 
-Route::get('update', [CrudUserController::class, 'updateUser'])->name('user.updateUser');
-Route::post('update', [CrudUserController::class, 'postUpdateUser'])->name('user.postUpdateUser');
+Route::delete('delete/{user}', [CrudUserController::class, 'deleteUser'])->name('user.deleteUser');
+Route::get('delete/{user}', [CrudUserController::class, 'deleteUser'])->name('user.delete');
 
 Route::get('list', [CrudUserController::class, 'listUser'])->name('user.list');
 Route::get('signout', [CrudUserController::class, 'signOut'])->name('signout');
