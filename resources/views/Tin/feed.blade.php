@@ -1,20 +1,36 @@
 ﻿<!DOCTYPE html>
 <html class="dark" lang="vi">
+
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<meta name="csrf-token" content="{{ csrf_token() }}" />
-<title>Bảng tin | NHOMJ</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<style>
-body{background:#0a0e1a;color:#e0e8f0;font-family:'Inter',sans-serif;}
-.glass-panel{background:rgba(15,21,36,.7);backdrop-filter:blur(16px);border:1px solid rgba(125,211,252,.12);}
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 48;}
-img{object-fit:cover;}
-</style>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
+    <title>Bảng tin | NHOMJ</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        body {
+            background: #0a0e1a;
+            color: #e0e8f0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .glass-panel {
+            background: rgba(15, 21, 36, .7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(125, 211, 252, .12);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+    </style>
 </head>
+
 <body class="min-h-screen">
 <header class="fixed top-0 w-full z-50 bg-[#0a0e1a]/80 backdrop-blur-xl border-b border-sky-400/10 px-6 h-16 flex items-center justify-between">
 <div class="flex items-center gap-6">
@@ -214,4 +230,5 @@ document.addEventListener('click', async event => {
 });
 </script>
 </body>
+
 </html>
