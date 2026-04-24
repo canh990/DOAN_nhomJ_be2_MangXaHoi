@@ -16,6 +16,9 @@
     <!-- Material Symbols Outlined icons -->
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 
+    <!-- CSRF Token -->
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>" />
+
     <!-- Cấu hình Tailwind CSS tùy chỉnh -->
     <script id="tailwind-config">
         tailwind.config = {
@@ -308,11 +311,24 @@
                     </div>
 
                     <!-- Các nút tương tác -->
-                    <div class="flex items-center justify-around">
-                        <button class="flex items-center gap-2 text-slate-400 hover:text-sky-300 transition-colors py-1.5 px-4 rounded-xl hover:bg-sky-400/10">
-                            <span class="material-symbols-outlined">thumb_up</span>
-                            <span class="text-sm font-medium">Thích</span>
-                        </button>
+                    <div class="nj-reaction-bar flex items-center justify-around" data-bai-viet-id="<?php echo e($post->id); ?>" data-phan-ung="">
+                        <div class="nj-btn-wrap" data-bai-viet-id="<?php echo e($post->id); ?>">
+                            <button class="nj-btn-main flex items-center gap-2 text-slate-400 hover:text-sky-300 transition-colors py-1.5 px-4 rounded-xl hover:bg-sky-400/10" onclick="NJ.nhanThich(this)">
+                                <span class="nj-icon material-symbols-outlined">thumb_up</span>
+                                <span class="nj-label text-sm font-medium">Thích</span>
+                            </button>
+                            <!-- Reaction Picker -->
+                            <div class="nj-picker absolute bottom-full mb-2 bg-surface border border-outline rounded-xl p-2 shadow-lg hidden">
+                                <div class="flex gap-1">
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="thich" onclick="NJ.chonCamXuc(this, 'thich')">👍</button>
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="tim" onclick="NJ.chonCamXuc(this, 'tim')">❤️</button>
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="haha" onclick="NJ.chonCamXuc(this, 'haha')">😆</button>
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="wow" onclick="NJ.chonCamXuc(this, 'wow')">😮</button>
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="buon" onclick="NJ.chonCamXuc(this, 'buon')">😢</button>
+                                    <button class="nj-picker-item w-8 h-8 flex items-center justify-center rounded-full hover:bg-primary/20" data-loai="phan_no" onclick="NJ.chonCamXuc(this, 'phan_no')">😡</button>
+                                </div>
+                            </div>
+                        </div>
                         <button class="flex items-center gap-2 text-slate-400 hover:text-sky-300 transition-colors py-1.5 px-4 rounded-xl hover:bg-sky-400/10">
                             <span class="material-symbols-outlined">chat_bubble</span>
                             <span class="text-sm font-medium">Bình luận</span>
@@ -432,6 +448,9 @@
             <span class="material-symbols-outlined">person</span>
         </button>
     </nav>
+
+    <!-- Include Social JS -->
+    <script src="<?php echo e(asset('js/social.js')); ?>"></script>
 </body>
 
 </html>
