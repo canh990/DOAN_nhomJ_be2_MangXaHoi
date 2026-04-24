@@ -9,14 +9,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class BaiViet extends Model
 {
     // Các cột có thể được gán dữ liệu hàng loạt
-    protected $fillable = ['nguoi_dung_id', 'noi_dung', 'loai', 'ngay_tao'];
+    protected $fillable = ['nguoi_dung_id', 'noi_dung', 'loai'];
 
     // Chỉ định rõ tên bảng trong database
-    protected $table = 'bai_viet'; 
+    protected $table = 'bai_viet';
 
-    // Tự động cast 'ngay_tao' thành đối tượng Carbon để dùng được diffForHumans()
+    // Eloquent mặc định đã xử lý created_at / updated_at cho bảng có timestamps()
     protected $casts = [
-        'ngay_tao' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     // Quan hệ: Bài viết thuộc về một người dùng
