@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -6,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use App\Models\User;
+use App\Models\BaiViet;
 
 class CrudUserController extends Controller
 {
@@ -77,13 +79,13 @@ class CrudUserController extends Controller
         $input = $request->all();
         $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users,id,'.$input['id'],
+            'email' => 'required|email|unique:users,id,' . $input['id'],
             'password' => 'required|min:6',
         ]);
         $user = User::find($input['id']);
         $user->name = $input['name'];
         $user->email = $input['email'];
-        $user->password = $input['password'];
+        $user->password = Hash::make($input['password']);
         $user->like = $input['like'];
         $user->save();
         return redirect("list")->withSuccess('Updated successfully');
@@ -103,5 +105,12 @@ class CrudUserController extends Controller
         Session::flush();
         Auth::logout();
         return redirect('login');
+    }
+
+    public function dashboard()
+    {
+        // Lấy bài viết và nạp sẵn thông tin user để tránh lỗi null
+        $posts = BaiViet::with('user')->latest()->get();
+        return view('crud_users.dashboard', compact('posts'));
     }
 }

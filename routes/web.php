@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CrudUserController;
+use App\Http\Controllers\PostController;
+use App\Models\BaiViet;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +16,15 @@ use App\Http\Controllers\CrudUserController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::prefix('bangtin')->group(function () {
+    Route::get('/', function () {
+        $posts = BaiViet::with('media')->latest()->get();
+        return view('welcome', compact('posts'));
+    })->name('home');
+
+    Route::post('/post', [PostController::class, 'store'])->name('post.store');
+});
 
 Route::get('dashboard', [CrudUserController::class, 'dashboard']);
 
@@ -34,5 +46,5 @@ Route::get('list', [CrudUserController::class, 'listUser'])->name('user.list');
 Route::get('signout', [CrudUserController::class, 'signOut'])->name('signout');
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
