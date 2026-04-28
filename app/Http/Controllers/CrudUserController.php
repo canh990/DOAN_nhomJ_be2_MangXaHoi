@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+use App\Models\User;
+use App\Models\BaiViet;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class CrudUserController extends Controller
@@ -58,6 +60,23 @@ class CrudUserController extends Controller
         return view('crud_user.register');
     }
 
+    public function postUser(Request $request): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email'],
+            'password' => ['required', 'string', 'min:6', 'confirmed'],
+        ]);
+
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]);
+
+        return redirect()->route('user.list')->with('success', 'Tạo user thành công');
+    }
+
     public function register(Request $request): RedirectResponse
     {
         $validated = $request->validate([
@@ -75,7 +94,7 @@ class CrudUserController extends Controller
         return redirect()->route('login')->with('success', 'Đăng ký thành công');
     }
 
-    public function ssignout(Request $request): RedirectResponse
+    public function signOut(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();
@@ -112,5 +131,23 @@ class CrudUserController extends Controller
         $user->delete();
 
         return redirect()->route('user.list')->with('success', 'Xóa user thành công');
+    }
+
+    public function updateUser(User $user): View
+    {
+        return view('crud_user.edit', ['user' => $user]);
+    }
+
+    public function postUpdateUser(Request $request, User $user): RedirectResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'email', 'max:255', 'unique:users,email,' . $user->id],
+            'like' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $user->update($validated);
+
+        return redirect()->route('user.list')->with('success', 'Cập nhật user thành công');
     }
 }

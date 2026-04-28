@@ -11,50 +11,27 @@ class BaiViet extends Model
 {
     use HasFactory;
 
+    // Các cột có thể được gán dữ liệu hàng loạt
+    protected $fillable = ['nguoi_dung_id', 'noi_dung', 'loai'];
+
+    // Chỉ định rõ tên bảng trong database
     protected $table = 'bai_viet';
 
-    protected $fillable = [
-        'nguoi_dung_id',
-        'bai_goc_id',
-        'loai',
-        'noi_dung',
-        'ten_dia_diem',
-        'vi_do',
-        'kinh_do',
-        'cam_xuc',
-        'hoat_dong',
-        'quyen_rieng_tu',
-        'da_ghim',
-        'da_chinh_sua',
-        'da_xoa',
-    ];
-
+    // Eloquent mặc định đã xử lý created_at / updated_at cho bảng có timestamps()
     protected $casts = [
-        'vi_do' => 'decimal:8',
-        'kinh_do' => 'decimal:8',
-        'da_ghim' => 'boolean',
-        'da_chinh_sua' => 'boolean',
-        'da_xoa' => 'boolean',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
-    // ── Relations ─────────────────────────────────────────
-    public function nguoiDung(): BelongsTo
+    // Quan hệ: Bài viết thuộc về một người dùng
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(NguoiDung::class, 'nguoi_dung_id');
+        return $this->belongsTo(User::class, 'nguoi_dung_id', 'id');
     }
 
-    public function baiGoc(): BelongsTo
+    // Quan hệ: Một bài viết có thể có nhiều ảnh/video (Media)
+    public function media(): HasMany
     {
-        return $this->belongsTo(BaiViet::class, 'bai_goc_id');
-    }
-
-    public function binhLuan(): HasMany
-    {
-        return $this->hasMany(BinhLuan::class, 'bai_viet_id');
-    }
-
-    public function camXuc(): HasMany
-    {
-        return $this->hasMany(CamXuc::class, 'bai_viet_id');
+        return $this->hasMany(MediaBaiViet::class, 'bai_viet_id', 'id');
     }
 }
